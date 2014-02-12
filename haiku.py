@@ -3,12 +3,16 @@ import hyphenate
 import random
 import re
 
-class Haiku:
-	def __init__():
-		dictFile = open("2of12.txt")
-		dictionary = dictFile.readLines()
+class HaikuGenerator:
+	# global dictionary = []
 
-	def makeHaiku():
+	def __init__(self):
+		dictFile = open('2of12.txt')
+		global dictionary 
+		dictionary = dictFile.readlines()
+		dictFile.close()
+
+	def makeHaiku(self):
 		firstLine = []
 		secondLine = []
 		thirdLine = []
@@ -16,6 +20,8 @@ class Haiku:
 		firstCount = 0
 		secondCount = 0
 		thirdCount = 0
+
+		# hyph = hyphenate.Hyphenator()
 
 		line1 = ""
 		line2 = ""
@@ -29,28 +35,28 @@ class Haiku:
 						add new word to the line
 		"""
 		while firstCount != 5:
-			newWord = dictionary[randrange(len(dictionary)-1)]
-			newSyll = len(hyphenate_word(newWord))
+			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
+			newSyll = len(hyphenate.hyphenate_word(newWord))
 			
 			if firstCount + newSyll <= 5:
 				firstCount += newSyll
-				firstLine.extend(newWord)
+				firstLine.append(newWord)
 
 		while secondCount != 7:
-			newWord = dictionary[randrange(len(dictionary)-1)]
-			newSyll = len(hyphenate_word(newWord))
+			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
+			newSyll = len(hyphenate.hyphenate_word(newWord))
 			
 			if secondCount + newSyll <= 7:
 				secondCount += newSyll
-				secondLine.extend(newWord)
+				secondLine.append(newWord)
 
 		while thirdCount != 5:
-			newWord = dictionary[randrange(len(dictionary)-1)]
-			newSyll = len(hyphenate_word(newWord))
+			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
+			newSyll = len(hyphenate.hyphenate_word(newWord))
 			
 			if thirdCount + newSyll <= 5:
 				thirdCount += newSyll
-				thirdLine.extend(newWord)
+				thirdLine.append(newWord)
 
 		for word in firstLine:
 			line1 += word + " "
@@ -61,4 +67,7 @@ class Haiku:
 
 		print line1
 		print line2
-		print line3
+		print line3	
+
+h = HaikuGenerator()
+h.makeHaiku()

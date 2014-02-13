@@ -1,11 +1,11 @@
 import sys
-import hyphenate
+# import hyphenate
 import random
+# from hyphen import Hyphenator, dict_info
+# from hyphen.dictools import *
 import re
 
 class HaikuGenerator:
-	# global dictionary = []
-
 	def __init__(self):
 		dictFile = open('2of12.txt')
 		global dictionary 
@@ -21,22 +21,18 @@ class HaikuGenerator:
 		secondCount = 0
 		thirdCount = 0
 
-		# hyph = hyphenate.Hyphenator()
+		# h_en = Hyphenator('en_US')
 
 		line1 = ""
 		line2 = ""
 		line3 = ""
 
-		"""	while firstCount != 5
-				add a new word
-				get the syllables for the new word
-					if firstCount + new word syllables <= 5
-						firstCount += new word.SyllableCount
-						add new word to the line
-		"""
 		while firstCount != 5:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
-			newSyll = len(hyphenate.hyphenate_word(newWord))
+			# print h_en.syllables(newWord)
+			print self.countSylls(newWord)
+			# newSyll = len(h_en.syllables(newWord))
+			newSyll = self.countSylls(newWord)
 			
 			if firstCount + newSyll <= 5:
 				firstCount += newSyll
@@ -44,7 +40,10 @@ class HaikuGenerator:
 
 		while secondCount != 7:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
-			newSyll = len(hyphenate.hyphenate_word(newWord))
+			# print h_en.syllables(newWord)
+			print self.countSylls(newWord)
+			# newSyll = len(h_en.syllables(newWord))
+			newSyll = self.countSylls(newWord)
 			
 			if secondCount + newSyll <= 7:
 				secondCount += newSyll
@@ -52,7 +51,10 @@ class HaikuGenerator:
 
 		while thirdCount != 5:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
-			newSyll = len(hyphenate.hyphenate_word(newWord))
+			# print h_en.syllables(newWord)
+			print self.countSylls(newWord)
+			# newSyll = len(h_en.syllables(newWord))
+			newSyll = self.countSylls(newWord)
 			
 			if thirdCount + newSyll <= 5:
 				thirdCount += newSyll
@@ -68,6 +70,43 @@ class HaikuGenerator:
 		print line1
 		print line2
 		print line3	
+
+
+	def countSylls(self, word):
+		vowels = ['a', 'e', 'i', 'o', 'u']
+		currentWord = []
+		currentWord.extend(word)
+		numVowels = 0
+		lastWasVowel = False
+
+		for wc in currentWord:
+
+			foundVowel = False
+			for v in vowels:
+
+				if v == wc and lastWasVowel:
+					foundVowel = True
+					lastWasVowel = True
+					break
+				elif v == wc and not lastWasVowel:
+					numVowels += 1
+					foundVowel = True
+					lastWasVowel = True
+					break
+
+			if not foundVowel:
+				lastWasVowel = False
+
+		if len(currentWord) > 2 and word[len(currentWord)-2:len(currentWord)-1] == "es":
+			numVowels += -1
+		elif len(currentWord) > 1 and word[len(currentWord)-1] == "e":
+			numVowels += -1
+		elif len(currentWord) > 1 and word[len(currentWord)-1] == "y":
+			numVowels += 1
+
+		return numVowels
+
+
 
 h = HaikuGenerator()
 h.makeHaiku()

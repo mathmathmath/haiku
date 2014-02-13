@@ -30,7 +30,6 @@ class HaikuGenerator:
 		while firstCount != 5:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
 			# print h_en.syllables(newWord)
-			print self.countSylls(newWord)
 			# newSyll = len(h_en.syllables(newWord))
 			newSyll = self.countSylls(newWord)
 			
@@ -41,7 +40,6 @@ class HaikuGenerator:
 		while secondCount != 7:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
 			# print h_en.syllables(newWord)
-			print self.countSylls(newWord)
 			# newSyll = len(h_en.syllables(newWord))
 			newSyll = self.countSylls(newWord)
 			
@@ -52,7 +50,6 @@ class HaikuGenerator:
 		while thirdCount != 5:
 			newWord = dictionary[random.randrange(len(dictionary)-1)].rstrip('\n')
 			# print h_en.syllables(newWord)
-			print self.countSylls(newWord)
 			# newSyll = len(h_en.syllables(newWord))
 			newSyll = self.countSylls(newWord)
 			
@@ -67,6 +64,7 @@ class HaikuGenerator:
 		for word in thirdLine:
 			line3 += word + " "
 
+		print "\n"
 		print line1
 		print line2
 		print line3	
@@ -77,7 +75,9 @@ class HaikuGenerator:
 		currentWord = []
 		currentWord.extend(word)
 		numVowels = 0
+
 		lastWasVowel = False
+		firstLetter = True
 
 		for wc in currentWord:
 
@@ -93,16 +93,23 @@ class HaikuGenerator:
 					foundVowel = True
 					lastWasVowel = True
 					break
+				elif wc == 'y' and not lastWasVowel and not firstLetter:
+					numVowels += 1
+					foundVowel = True
+					lastWasVowel = True
+					break
 
 			if not foundVowel:
 				lastWasVowel = False
 
+			firstLetter = False
+
 		if len(currentWord) > 2 and word[len(currentWord)-2:len(currentWord)-1] == "es":
 			numVowels += -1
 		elif len(currentWord) > 1 and word[len(currentWord)-1] == "e":
-			numVowels += -1
-		elif len(currentWord) > 1 and word[len(currentWord)-1] == "y":
-			numVowels += 1
+			numVowels += -1	
+		elif len(currentWord) > 1 and word[len(currentWord)-1] == "y" and word[len(currentWord)-3] in vowels:
+			numVowels += -1	
 
 		return numVowels
 
